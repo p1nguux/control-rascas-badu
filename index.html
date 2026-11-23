@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Badulaque Groove · Control de Rascas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#070b1f;--card:#0d1432;--card2:#0a1030;--line:#2a3a80;--tx:#fff;--mut:#9db6ff;
+  --red:#e11d2e;--blue:#1e6bff;--blue2:#2f7bff;
+  --mk:"Permanent Marker","Rock Salt",Impact,"Arial Black",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
+  background:
+   radial-gradient(circle at 6% 10%,rgba(225,29,46,.55) 0 46px,transparent 48px),
+   radial-gradient(circle at 94% 22%,rgba(30,107,255,.55) 0 58px,transparent 60px),
+   radial-gradient(circle at 88% 78%,rgba(225,29,46,.4) 0 40px,transparent 42px),
+   radial-gradient(circle at 10% 88%,rgba(30,107,255,.45) 0 52px,transparent 54px),
+   radial-gradient(900px 500px at 85% -10%,rgba(225,29,46,.28),transparent),
+   radial-gradient(900px 500px at 0% 0%,rgba(30,107,255,.3),transparent),
+   radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.5px) 0 0/16px 16px,
+   var(--bg);background-attachment:fixed}
+.wrap{max-width:1080px;margin:0 auto;padding:18px 16px 56px}
+.hero{position:relative;text-align:center;padding:10px 0 4px}
+.ltd{position:absolute;right:0;top:0;border:2px solid #fff;border-radius:8px;padding:2px 9px;background:#12307e;text-shadow:0 0 8px #5aa0ff;transform:rotate(4deg);line-height:1.1}
+.ltd b{display:block;font-family:var(--mk);font-size:1.1rem;color:#cfe1ff}
+.ltd small{display:block;color:#ff5a68;font-weight:800;font-size:.7rem;letter-spacing:1px;text-shadow:0 0 8px #e11d2e}
+.kicker{font-family:var(--mk);letter-spacing:2px;font-size:.95rem;margin:0 0 -4px;text-shadow:2px 2px 0 var(--red)}
+h1{margin:0;font-family:var(--mk);font-weight:400;text-transform:uppercase;line-height:.95;font-size:clamp(2.3rem,9vw,3.8rem);transform:rotate(-2deg);
+  text-shadow:2px 2px 0 var(--red),-2px -2px 0 var(--red),2px -2px 0 var(--red),-2px 2px 0 var(--red),5px 6px 0 #000}
+h1 em{display:block;font-style:italic;color:var(--blue2);margin-top:2px;
+  text-shadow:2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,5px 6px 0 var(--red)}
+.tag{display:inline-block;margin-top:14px;background:var(--red);color:#fff;font-family:var(--mk);padding:4px 14px;border:2px solid #fff;border-radius:6px;transform:rotate(1.5deg);letter-spacing:1px;text-transform:uppercase;box-shadow:3px 3px 0 #000}
+.drip{height:26px;margin:2px -16px 18px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='26' viewBox='0 0 120 26'><path d='M0 0H120V8H112V20a4 4 0 0 1-8 0V8H70V14a3 3 0 0 1-6 0V8H40V24a4 4 0 0 1-8 0V8H14V16a3 3 0 0 1-6 0V8H0Z' fill='%23e11d2e'/></svg>") repeat-x top left/120px 26px}
+.layout{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:26px;align-items:start}
+.previewcol{position:sticky;top:16px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.previewcol{position:static}.ltd{position:static;display:inline-block;margin-bottom:6px}}
+.card{background:var(--card);border:2px solid #fff;border-radius:14px;padding:18px 16px 6px;margin:26px 0 24px;box-shadow:6px 6px 0 var(--red)}
+.card:nth-of-type(even){box-shadow:6px 6px 0 var(--blue)}
+.card h2{display:inline-block;font-family:var(--mk);font-weight:400;font-size:1rem;text-transform:uppercase;letter-spacing:1px;background:var(--blue);border:2px solid #fff;padding:2px 12px;margin:-32px 0 14px -4px;transform:rotate(-2deg);box-shadow:2px 2px 0 #000}
+.field{margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.grid2{grid-template-columns:1fr;gap:0}}
+label{display:block;font-size:.74rem;color:var(--mut);margin:0 0 5px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+label .req{color:#ff5a68}
+input,select,textarea{width:100%;padding:11px 12px;border-radius:8px;border:2px solid var(--line);background:var(--card2);color:#fff;font-size:1rem;font-family:inherit;color-scheme:dark}
+textarea{min-height:90px;resize:vertical}
+select option{background:#0d1432}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#fff;box-shadow:0 0 0 3px var(--blue)}
+::placeholder{color:#6f7fa8}
+button{cursor:pointer;border:2px solid #fff;border-radius:8px;padding:12px 16px;font-family:var(--mk);text-transform:uppercase;letter-spacing:.8px;font-size:1rem;color:#fff;background:var(--red);box-shadow:3px 3px 0 #000}
+button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+button:disabled{opacity:.6;cursor:wait}
+.submit{width:100%;font-size:1.15rem;padding:15px}
+.dl{display:none;margin-top:12px;background:var(--blue)}
+#msg{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:.9rem;display:none;line-height:1.5;border:2px solid #fff}
+#msg.ok{display:block;background:rgba(30,107,255,.3)}
+#msg.err{display:block;background:rgba(225,29,46,.3)}
+.prevlabel{font-family:var(--mk);letter-spacing:2px;text-transform:uppercase;font-size:.9rem;color:var(--mut);margin:26px 0 12px;text-align:center}
+.slipfit{overflow-x:auto;padding:4px 8px 14px}
+footer{text-align:center;color:var(--mut);font-size:.75rem;margin-top:28px;letter-spacing:1.5px}
+
+.hist{margin-top:26px}
+.hist h3{font-family:var(--mk);font-weight:400;font-size:.95rem;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+.hrow{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border:2px solid var(--line);border-radius:10px;background:var(--card);margin-bottom:8px;font-size:.9rem}
+.hrow b{font-family:var(--mk);font-weight:400;color:#fff}.hrow span{color:var(--mut)}
+#slip{width:100%;max-width:480px;margin:0 auto;position:relative;overflow:hidden;background:#070b1f;color:#fff;border:3px solid #fff;border-radius:14px;box-shadow:6px 6px 0 var(--red);
+  background-image:radial-gradient(circle at 96% 8%,rgba(30,107,255,.45) 0 46px,transparent 48px),radial-gradient(circle at 4% 96%,rgba(225,29,46,.4) 0 40px,transparent 42px),radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.5px);background-size:auto,auto,16px 16px}
+#slip .s-stripe{height:12px;background:repeating-linear-gradient(-45deg,#e11d2e 0 16px,#fff 16px 32px,#1e6bff 32px 48px)}
+#slip .s-head{padding:18px 22px 12px;border-bottom:3px dashed #2a3a80;text-align:center}
+#slip .s-head b{display:block;font-family:var(--mk);font-weight:400;font-size:26px;text-transform:uppercase;line-height:1;text-shadow:2px 2px 0 #e11d2e}
+#slip .s-head b i{font-style:italic;color:#2f7bff;text-shadow:2px 2px 0 #fff}
+#slip .s-head small{display:block;margin-top:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9db6ff;font-weight:700}
+#slip .s-title{text-align:center;padding:16px 22px 4px}
+#slip .s-title h3{margin:0;display:inline-block;font-family:var(--mk);font-weight:400;font-size:30px;text-transform:uppercase;transform:rotate(-1.5deg);text-shadow:2px 2px 0 #e11d2e,4px 5px 0 #000}
+#slip .s-title h3 span{color:#2f7bff;text-shadow:2px 2px 0 #fff,4px 5px 0 #e11d2e}
+#slip .s-body{padding:14px 22px 6px}
+#slip .lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9db6ff;font-weight:800;margin-bottom:4px}
+#slip .val{font-size:17px;font-weight:700;padding-bottom:5px;border-bottom:2px solid #2f7bff;min-height:30px;word-break:break-word;margin-bottom:14px}
+#slip .val.empty{color:#5a6a99;font-weight:500}
+#slip .big{display:flex;align-items:stretch;border:2px solid #fff;border-radius:10px;overflow:hidden;box-shadow:3px 3px 0 #1e6bff;margin:4px 0 16px}
+#slip .big>div{flex:1;padding:10px 12px;text-align:center;background:#0d1432}
+#slip .big .n{font-family:var(--mk);font-size:38px;line-height:1.1}
+#slip .big .t{background:#e11d2e}
+#slip .big .t .lbl{color:#ffd5d9}
+#slip .s-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 22px;background:#e11d2e;color:#fff;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:800}
+#slip .barcode{height:16px;width:130px;background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 4px,#fff 4px 5px,transparent 5px 8px,#fff 8px 11px,transparent 11px 13px)}
+#slip .two{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.layout{grid-template-columns:minmax(0,440px) minmax(0,1fr)}
+.tabs{display:flex;gap:12px;justify-content:center;margin:0 0 4px}
+.tabs button{background:transparent;box-shadow:none;border-color:#6b7bc0;color:#cfd8ff}
+.tabs button.on{background:var(--red);border-color:#fff;color:#fff;box-shadow:3px 3px 0 #000}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 12px}
+.stat{background:var(--card2);border:2px solid var(--blue2);border-radius:10px;padding:10px 6px;text-align:center}
+.stat small{display:block;color:var(--mut);font-size:.66rem;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.stat b{font-family:var(--mk);font-weight:400;font-size:1.2rem;color:#fff}
+.note{color:#ffb3ba;font-size:.84rem;min-height:1em;margin-bottom:10px}
+.empty{color:var(--mut);text-align:center;padding:18px;font-size:.9rem}
+@media(max-width:520px){.hrow{flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="ltd"><b>LTD</b><small>24/7</small></div>
+    <div class="kicker">★ Bienvenido a ★</div>
+    <h1>Badulaque <em>Groove</em></h1>
+    <div class="tag">Control de rascas</div>
+  </header>
+  <div class="drip"></div>
+
+  <div class="tabs">
+    <button type="button" id="tReg" class="on">✍️ Registrar</button>
+    <button type="button" id="tHis">📋 Historial diario</button>
+  </div>
+
+  <div class="layout" id="vReg">
+    <div>
+      <form id="form" novalidate>
+        <section class="card">
+          <h2>Registro</h2>
+          <div class="grid2">
+            <div class="field"><label for="fecha">Día <span class="req">*</span></label><input type="date" id="fecha" required></div>
+            <div class="field"><label for="hora">Hora <span class="req">*</span></label><input type="time" id="hora" required></div>
+          </div>
+          <div class="field"><label for="nombre">Nombre del empleado <span class="req">*</span></label><input type="text" id="nombre" placeholder="Nombre y apellido" autocomplete="off" required></div>
+          <div class="field"><label for="factura">Últimos 3 dígitos de la factura <span class="req">*</span></label><input type="text" id="factura" inputmode="numeric" maxlength="3" placeholder="000" autocomplete="off" required></div>
+          <div class="grid2">
+            <div class="field"><label for="rascas">Rascas comprados <span class="req">*</span></label><input type="number" id="rascas" min="1" step="1" inputmode="numeric" placeholder="0" required></div>
+            <div class="field"><label for="precio">Precio por rasca</label><input type="text" id="precio" value="100 $" readonly></div>
+          </div>
+        </section>
+        <button type="submit" class="submit" id="btn">Registrar rascas</button>
+        <div id="msg"></div>
+      </form>
+      <div class="hist" id="hist" style="display:none"><h3>★ Registrados en esta sesión ★</h3><div id="hl"></div></div>
+    </div>
+
+    <div class="previewcol">
+      <p class="prevlabel">★ Vista previa del registro ★</p>
+      <div id="slip">
+        <div class="s-stripe"></div>
+        <div class="s-head"><b>Badulaque <i>Groove</i></b><small>Control de ventas · Rasca y Gana</small></div>
+        <div class="s-title"><h3>Rasca <span>y Gana</span></h3></div>
+        <div class="s-body">
+          <div class="two">
+            <div><div class="lbl">Día</div><div class="val empty" id="p-fecha">--/--/----</div></div>
+            <div><div class="lbl">Hora</div><div class="val empty" id="p-hora">--:--</div></div>
+          </div>
+          <div class="lbl">Empleado</div><div class="val empty" id="p-nombre">Nombre y apellido</div>
+          <div class="lbl">Factura (últimos 3 dígitos)</div><div class="val empty" id="p-factura">000</div>
+          <div class="big">
+            <div><div class="lbl">Rascas</div><div class="n" id="p-n">0</div></div>
+            <div class="t" id="p-tbox"><div class="lbl">Total</div><div class="n" id="p-t">0 $</div></div>
+          </div>
+        </div>
+        <div class="s-bar"><span>Badulaque Groove · Rascas</span><div class="barcode"></div></div>
+        <div class="s-stripe"></div>
+      </div>
+    </div>
+  </div>
+  <div id="vHis" style="display:none;max-width:640px;margin:0 auto">
+    <section class="card">
+      <h2>Historial diario</h2>
+      <div class="grid2">
+        <div class="field"><label for="hFecha">Día</label><input type="date" id="hFecha"></div>
+        <div class="field"><label for="hBuscar">Buscar empleado</label><input type="text" id="hBuscar" placeholder="Nombre" autocomplete="off"></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><small>Registros</small><b id="hN">0</b></div>
+        <div class="stat"><small>Rascas</small><b id="hR">0</b></div>
+        <div class="stat"><small>Total</small><b id="hT">0 $</b></div>
+      </div>
+      <div class="note" id="hState"></div>
+    </section>
+    <div id="hList"></div>
+    <button type="button" id="hRef" class="submit" style="margin-top:8px">↻ Actualizar</button>
+  </div>
+  <footer>BADULAQUE GROOVE · CONTROL DE RASCAS</footer>
+</div>
+
+<script>
+  // 1) Webhook del canal de Discord donde quieres que aparezcan los registros.
+  const WEBHOOK_URL = "https://discord.com/api/webhooks/1574392817768464475/Psx5jCLp_kMH4p83AchhJvc97L6sWQV5VGlE5In7Qk3MEwO0PseYSyIGgIAsVaKW-Gvw";
+  // 2) URL de la aplicación web de Google Apps Script (la hoja con los totales).
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbw5uvjnbCYhs97GGF7-juW2SSvtU4jhJxpW-fxISZLg6_37nMvadpMYtH6YmDubdPP4og/exec";
+  // Si dejas ambos vacíos, el generador funciona pero no envía nada a ningún sitio.
+
+  const PRECIO = 100; // precio fijo por rasca
+  const $ = id => document.getElementById(id);
+  const form = $('form'), msg = $('msg'), btn = $('btn');
+  const pad = n => String(n).padStart(2, '0');
+  const iso = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const fmtISO = s => { const [y, m, d] = s.split('-'); return d + '/' + m + '/' + y; };
+  const money = n => Math.round(n).toLocaleString('de-DE') + ' $';
+  function show(type, text) { msg.className = type; msg.textContent = text; msg.style.display = 'block'; }
+  function setVal(id, text, ph) { const el = $(id), has = !!text; el.textContent = has ? text : ph; el.classList.toggle('empty', !has); }
+
+  function render() {
+    setVal('p-fecha', $('fecha').value ? fmtISO($('fecha').value) : '', '--/--/----');
+    setVal('p-nombre', $('nombre').value.trim(), 'Nombre y apellido');
+    $('factura').value = $('factura').value.replace(/\D/g, '').slice(0, 3);
+    setVal('p-hora', $('hora').value, '--:--');
+    setVal('p-factura', $('factura').value ? '…' + $('factura').value : '', '000');
+    const n = Math.max(0, parseInt($('rascas').value, 10) || 0), p = PRECIO;
+    $('p-n').textContent = n;
+        $('p-t').textContent = money(n * p);
+  }
+  form.addEventListener('input', render);
+  render();
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const fecha = $('fecha').value, hora = $('hora').value, factura = $('factura').value.trim(), nombre = $('nombre').value.trim();
+    const rascas = parseInt($('rascas').value, 10), precio = PRECIO;
+    if (!fecha || !hora || !nombre || !(rascas >= 1)) return show('err', 'Completa día, hora, nombre y una cantidad de rascas de 1 o más.');
+    if (!/^\d{3}$/.test(factura)) return show('err', 'Escribe los 3 últimos dígitos de la factura.');
+
+    btn.disabled = true; btn.textContent = 'Registrando...'; msg.style.display = 'none';
+    const total = rascas * precio;
+    let okD = false, okS = false, tried = 0;
+    try {
+      if (WEBHOOK_URL) {
+        tried++;
+        const fields = [
+          { name: '📅 Día', value: fmtISO(fecha), inline: true },
+          { name: '🕒 Hora', value: hora, inline: true },
+          { name: '👤 Empleado', value: nombre, inline: true },
+          { name: '🧾 Factura', value: '…' + factura, inline: true },
+          { name: '🎟️ Rascas', value: String(rascas), inline: true }
+        ];
+        if (precio) fields.push({ name: '💰 Total', value: money(total), inline: true });
+        try {
+          const r = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ embeds: [{ title: '🛒 Badulaque Groove · Rasca y Gana', color: 0xE11D2E, fields }] }) });
+          okD = r.ok;
+        } catch (_) {}
+      }
+      if (SHEET_URL) {
+        tried++;
+        try {
+          await fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ fecha, hora, empleado: nombre, factura, rascas, precio }) });
+          okS = true;
+        } catch (_) {}
+      }
+      if (!tried) return show('err', 'Aún no has configurado el webhook ni la hoja. Pega las URLs en el script del archivo.');
+      const ok = [okD && 'Discord', okS && 'la hoja'].filter(Boolean);
+      if (!ok.length) return show('err', 'No se pudo registrar. Revisa las URLs y tu conexión e inténtalo de nuevo.');
+      show('ok', '✅ Registrado en ' + ok.join(' y ') + (ok.length < tried ? ' (el otro destino falló, revísalo)' : '') + '.');
+      $('hist').style.display = '';
+      const row = document.createElement('div'); row.className = 'hrow';
+      row.innerHTML = '<b></b><span></span>';
+      row.firstChild.textContent = nombre; row.lastChild.textContent = fmtISO(fecha) + ' ' + hora + ' · …' + factura + ' · ' + rascas + (rascas === 1 ? ' rasca' : ' rascas');
+      $('hl').prepend(row);
+      $('nombre').value = ''; $('rascas').value = ''; $('factura').value = ''; $('hora').value = ''; render();
+    } finally { btn.disabled = false; btn.textContent = 'Registrar rascas'; }
+  });
+
+  // ===== Pestañas e historial diario =====
+  function goTab(t) {
+    $('vReg').style.display = t === 'reg' ? '' : 'none';
+    $('vHis').style.display = t === 'his' ? '' : 'none';
+    $('tReg').classList.toggle('on', t === 'reg');
+    $('tHis').classList.toggle('on', t === 'his');
+    if (t === 'his') { if (!$('hFecha').value) $('hFecha').value = iso(new Date()); loadHist(); }
+  }
+  $('tReg').onclick = () => goTab('reg');
+  $('tHis').onclick = () => goTab('his');
+  let hData = [];
+  async function loadHist() {
+    const f = $('hFecha').value, st = $('hState');
+    if (!f) { st.textContent = 'Elige un día.'; return; }
+    if (!SHEET_URL) { st.textContent = 'Falta configurar SHEET_URL en el archivo.'; return; }
+    st.textContent = 'Cargando...';
+    try {
+      const r = await fetch(SHEET_URL + '?fecha=' + encodeURIComponent(f));
+      const j = await r.json();
+      if (!j.ok) throw new Error('bad');
+      hData = j.registros || []; st.textContent = ''; renderHist();
+    } catch (_) {
+      hData = []; renderHist();
+      st.textContent = 'No se pudo cargar el historial. Revisa tu conexión o que el script de Google esté actualizado.';
+    }
+  }
+  function renderHist() {
+    const q = $('hBuscar').value.trim().toLowerCase();
+    const rows = hData.filter(x => !q || String(x.empleado).toLowerCase().includes(q));
+    $('hN').textContent = rows.length;
+    $('hR').textContent = rows.reduce((a, x) => a + (Number(x.rascas) || 0), 0);
+    $('hT').textContent = money(rows.reduce((a, x) => a + (Number(x.total) || 0), 0));
+    const box = $('hList'); box.innerHTML = '';
+    if (!rows.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = 'Sin registros este día.'; box.appendChild(e); return; }
+    rows.forEach(x => {
+      const row = document.createElement('div'); row.className = 'hrow';
+      const b = document.createElement('b'), sp = document.createElement('span');
+      b.textContent = x.empleado;
+      sp.textContent = x.hora + ' · …' + x.factura + ' · ' + x.rascas + (Number(x.rascas) === 1 ? ' rasca' : ' rascas') + (x.total ? ' · ' + money(x.total) : '');
+      row.appendChild(b); row.appendChild(sp); box.appendChild(row);
+    });
+  }
+  $('hFecha').addEventListener('change', loadHist);
+  $('hBuscar').addEventListener('input', renderHist);
+  $('hRef').onclick = loadHist;
+</script>
+</body>
+</html>
